@@ -25,6 +25,8 @@ if (process.env.MONGO_URI) {
     db.on("error", function (error) {
         console.log("Mongoose Error: ", error);
     });
+} else {
+    mongoose.connect("mongodb://localhost/mongoHeadlines")
 };
 
 // Once logged in to the db through mongoLab
@@ -55,11 +57,12 @@ app.get("/scrape", function (req, res) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
 
+        
         // Now, we grab every h2 within an article tag, and do the following:
         $("section.save-venue").each(function (i, element) {
             // Save an empty result object
             var result = {};
-
+                
             // Add the text and href of every link, and save them as properties of the result object
             result.title = $(element)
                 .children("hgroup.save-venue__header")
@@ -73,15 +76,15 @@ app.get("/scrape", function (req, res) {
 
 
             //Create a new Article using the `result` object built from scraping
-            // db.Article.create(result)
-            //   .then(function(dbArticle) {
-            //     // View the added result in the console
-            //     console.log(dbArticle);
-            //   });
-            //   .catch(function(err) {
-            //     // If an error occurred, send it to the client
-            //     return res.json(err);
-            //   });
+            db.Article.create(result)
+              .then(function(dbArticle) {
+                // View the added result in the console
+                console.log(dbArticle);
+              })
+              .catch(function(err) {
+                // If an error occurred, send it to the client
+                return res.json(err);
+              });
             console.log(result);
         });
 
