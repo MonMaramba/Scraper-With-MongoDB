@@ -14,6 +14,9 @@ const ArticleSchema = new Schema({
         type: String,
         required: `A link is required`
     },
+    summary: {
+        type: String
+    },
     note: {
         type: Schema.Types.ObjectId,
         ref: "Note"

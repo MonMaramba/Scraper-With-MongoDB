@@ -49,65 +49,64 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Get route for scraping the Formula 1 website
-app.get("/scrape", function(req, res) {
+app.get("/scrape", function (req, res) {
     // First, we grab the body of the html with request
-    axios.get("https://www.thrillist.com/eat/nation/best-burgers-in-america-burger-quest#").then(function(response) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
-      var $ = cheerio.load(response.data);
-  
-      // Now, we grab every h2 within an article tag, and do the following:
-      $("section.save-venue").each(function(i, element) {
-        // Save an empty result object
-        var result = {};
-  
-        // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(element)
-          .children("hgroup.save-venue__header")
-          .text();
-        result.link = $(element)
-          .children("hgroup.save-venue__sub-header").children("a")
-          .attr("href");
-        result.summary = $(element)
-          .children("p")
-          .text()
+    axios.get("https://www.thrillist.com/eat/nation/best-burgers-in-america-burger-quest#").then(function (response) {
+        // Then, we load that into cheerio and save it to $ for a shorthand selector
+        var $ = cheerio.load(response.data);
 
-  
-        //Create a new Article using the `result` object built from scraping
-        // db.Article.create(result)
-        //   .then(function(dbArticle) {
-        //     // View the added result in the console
-        //     console.log(dbArticle);
-        //   });
-        //   .catch(function(err) {
-        //     // If an error occurred, send it to the client
-        //     return res.json(err);
-        //   });
-        console.log(result);
-      });
-      
-      // If we were able to successfully scrape and save an Article, send a message to the client
-      res.send("Scrape Complete");
-    });
-  });
+        // Now, we grab every h2 within an article tag, and do the following:
+        $("section.save-venue").each(function (i, element) {
+            // Save an empty result object
+            var result = {};
 
-  // Route for getting all Articles from the db
-app.get("/articles", function(req, res) {
-  // Grab every document in the Articles collection
-  db.Article.find({})
-    .then(function(dbArticle) {
-      // If we were able to successfully find Articles, send them back to the client
-      res.json(dbArticle);
-      console.log(dbArticle);
-    })
-    .catch(function(err) {
-      // If an error occurred, send it to the client
-      res.json(err);
+            // Add the text and href of every link, and save them as properties of the result object
+            result.title = $(element)
+                .children("hgroup.save-venue__header")
+                .text();
+            result.link = $(element)
+                .children("hgroup.save-venue__sub-header").children("a")
+                .attr("href");
+            result.summary = $(element)
+                .children("p")
+                .text()
+
+
+            //Create a new Article using the `result` object built from scraping
+            // db.Article.create(result)
+            //   .then(function(dbArticle) {
+            //     // View the added result in the console
+            //     console.log(dbArticle);
+            //   });
+            //   .catch(function(err) {
+            //     // If an error occurred, send it to the client
+            //     return res.json(err);
+            //   });
+            console.log(result);
+        });
+
+        // If we were able to successfully scrape and save an Article, send a message to the client
+        res.send("Scrape Complete");
     });
 });
 
+// Route for getting all Articles from the db
+app.get("/articles", function (req, res) {
+    // Grab every document in the Articles collection
+    db.Article.find({})
+        .then(function (dbArticle) {
+            // If we were able to successfully find Articles, send them back to the client
+            res.json(dbArticle);
+            console.log(dbArticle);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
 
-  // Start the server
-app.listen(PORT, function() {
+
+// Start the server
+app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
-  });
-  
+});
