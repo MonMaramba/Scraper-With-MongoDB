@@ -51,29 +51,33 @@ app.use(express.static("public"));
 // Get route for scraping the Formula 1 website
 app.get("/scrape", function(req, res) {
     // First, we grab the body of the html with request
-    axios.get("https://www.crash.net/f1").then(function(response) {
+    axios.get("https://www.thrillist.com/eat/nation/best-burgers-in-america-burger-quest#").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       var $ = cheerio.load(response.data);
   
       // Now, we grab every h2 within an article tag, and do the following:
-      $("span.field-content").each(function(i, element) {
+      $("section.save-venue").each(function(i, element) {
         // Save an empty result object
         var result = {};
   
         // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(this)
-          .children()
+        result.title = $(element)
+          .children("hgroup.save-venue__header")
           .text();
-        result.link = $(this)
-          .children()
+        result.link = $(element)
+          .children("hgroup.save-venue__sub-header").children("a")
           .attr("href");
+        result.summary = $(element)
+          .children("p")
+          .text()
+
   
         //Create a new Article using the `result` object built from scraping
         // db.Article.create(result)
         //   .then(function(dbArticle) {
         //     // View the added result in the console
         //     console.log(dbArticle);
-        //   })
+        //   });
         //   .catch(function(err) {
         //     // If an error occurred, send it to the client
         //     return res.json(err);
