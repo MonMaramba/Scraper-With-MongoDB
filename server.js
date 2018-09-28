@@ -52,6 +52,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
+// The routes
+app.get("/", function(req, res) {
+    Article.find({"saved": false}, function(error, data) {
+        var hbsObject = {
+            article: data
+        };
+        console.log(hbsObject);
+        res.render("home", hbsObject)
+    })
+})
+
 // Get route for scraping the Formula 1 website
 app.get("/scrape", function (req, res) {
     // First, we grab the body of the html with request
