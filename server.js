@@ -54,18 +54,27 @@ app.use(express.static("public"));
 
 // The routes
 app.get("/", function(req, res) {
-    Article.find({"saved": false}, function(error, data) {
+    db.Article.find({"saved": false}, function(error, data) {
         var hbsObject = {
             article: data
         };
         console.log(hbsObject);
-        res.render("home", hbsObject)
-    })
-})
+        res.render("index", hbsObject)
+    });
+});
+
+app.get("/saved", function(req, res) {
+    db.Article.find({"saved": true}).populate("notes").exec(function(error, articles) {
+        var hbsObject = {
+            article: articles
+        };
+        res.render("saved", hbsObject);
+    });
+});
 
 // Get route for scraping the Formula 1 website
 app.get("/scrape", function (req, res) {
-    // First, we grab the body of the html with request
+    // To grab the body of the html with request
     axios.get("https://www.thrillist.com/eat/nation/best-burgers-in-america-burger-quest#").then(function (response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
@@ -91,14 +100,22 @@ app.get("/scrape", function (req, res) {
             //Create a new Article using the `result` object built from scraping
             db.Article.create(result)
               .then(function(dbArticle) {
-                // View the added result in the console
+               // View the added result in the console
+              db.Article.update({
+                saved: true
+              }, {
+                  multi: true
+              })
                 console.log(dbArticle);
               })
+              
               .catch(function(err) {
+                // console.log(dbArticle);
                 // If an error occurred, send it to the client
                 return res.json(err);
               });
-            //console.log(result);
+            
+            
         });
 
         // If we were able to successfully scrape and save an Article, send a message to the client

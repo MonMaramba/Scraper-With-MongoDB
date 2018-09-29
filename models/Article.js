@@ -23,7 +23,7 @@ const ArticleSchema = new Schema({
     },
     saved: {
         type: Boolean,
-        default: false
+        default: true
     }
 
 });
