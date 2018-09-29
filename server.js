@@ -54,7 +54,7 @@ app.use(express.static("public"));
 
 // The routes
 app.get("/", function(req, res) {
-    db.Article.find({"saved": true}, function(error, data) {
+    db.Article.find({"saved": false}, function(error, data) {
         var hbsObject = {
             article: data
         };
@@ -100,13 +100,7 @@ app.get("/scrape", function (req, res) {
             //Create a new Article using the `result` object built from scraping
             db.Article.create(result)
               .then(function(dbArticle) {
-               // View the added result in the console
-              db.Article.update({
-                saved: true
-              }, {
-                  multi: true
-              })
-                // console.log(dbArticle);
+                console.log(dbArticle);
               })
               
               .catch(function(err) {
@@ -120,6 +114,24 @@ app.get("/scrape", function (req, res) {
 
         // If we were able to successfully scrape and save an Article, send a message to the client
         res.send("Scrape Complete");
+    });
+});
+
+// Save an article
+app.post("/articles/save/:id", function(req, res) {
+    // Use the article id to find and update its saved boolean
+    db.Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true})
+    // Execute the above query
+    .exec(function(err, doc) {
+      // Log any errors
+      if (err) {
+        console.log(err);
+      }
+      else {
+        // Or send the document to the browser
+        res.send(doc);
+        console.log(doc);
+      }
     });
 });
 
