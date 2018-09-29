@@ -54,7 +54,7 @@ app.use(express.static("public"));
 
 // The routes
 app.get("/", function(req, res) {
-    db.Article.find({"saved": false}, function(error, data) {
+    db.Article.find({"saved": true}, function(error, data) {
         var hbsObject = {
             article: data
         };
@@ -106,7 +106,7 @@ app.get("/scrape", function (req, res) {
               }, {
                   multi: true
               })
-                console.log(dbArticle);
+                // console.log(dbArticle);
               })
               
               .catch(function(err) {
