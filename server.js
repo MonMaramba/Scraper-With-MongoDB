@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+var path = require("path");
 // require('dotenv').config();
 
 //Initialize Express]
@@ -11,7 +12,9 @@ const app = express();
 
 //Setup for express handlebars for templating
 const exphbs = require("express-handlebars");
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs({ defaultLayout: "main", 
+partialsDir: path.join(__dirname, "/views/layouts/partials") 
+}));
 app.set("view engine", "handlebars");
 
 //port set up for Heroku deployment
@@ -64,7 +67,7 @@ app.get("/", function(req, res) {
 });
 
 app.get("/saved", function(req, res) {
-    db.Article.find({"saved": true}).populate("notes").exec(function(error, articles) {
+    db.Article.find({"saved": true}).exec(function(error, articles) {
         var hbsObject = {
             article: articles
         };
@@ -152,7 +155,7 @@ app.get("/articles", function (req, res) {
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
-    console.log("I'm here!")// Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     db.Article.findOne({ _id: req.params.id })
       // ..and populate all of the notes associated with it
       .populate("note")

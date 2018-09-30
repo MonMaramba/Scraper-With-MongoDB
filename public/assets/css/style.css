@@ -1,0 +1,25 @@
+body {
+    background-color: rgb(228, 197, 139);
+}
+
+.deleteNote {
+	display: inline-block;
+}
+
+.jumbotron {
+    background-color: aqua;
+
+}
+
+.panel-heading {
+    background-color: rgb(235, 127, 115);
+}
+
+.previousNotes {
+    display: inline-block;
+    width: 90%
+}
+
+#scrape {
+    margin: 8px 0px;
+}
