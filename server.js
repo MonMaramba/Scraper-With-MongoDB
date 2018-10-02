@@ -21,32 +21,11 @@ app.set("view engine", "handlebars");
 var PORT = process.env.MONGO_URI || 3000;
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-
-// Set mongoose to leverage built in JavaScript ES6 Promises
-// Connect to the Mongo DB
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines"
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI);
 
 
-// // Database configuration with mongoose
-// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-// // if (process.env.MONGO_URI) {
-//     mongoose.connect(MONGODB_URI);
-    // const db = mongoose.connection;
-
-    // // For mongoose errors
-    // db.on("error", function (error) {
-    //     console.log("Mongoose Error: ", error);
-    // });
-// } else {
-//     mongoose.connect("mongodb://localhost/mongoHeadlines")
-// };
-
-// Once logged in to the db through mongoLab
-// db.onConnect("open", function() {
-//     console.log("Mongoose connection successful.");
-//   });
 
 
 //Scraping tools
