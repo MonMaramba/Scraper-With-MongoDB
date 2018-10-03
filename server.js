@@ -21,7 +21,7 @@ app.set("view engine", "handlebars");
 var PORT = process.env.MONGO_URI || 3000;
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines"
+var MONGODB_URI = process.env.PORT || "mongodb://localhost/mongoHeadlines"
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
