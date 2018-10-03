@@ -46,9 +46,13 @@ app.use(express.static("public"));
 // The routes
 app.get("/", function(req, res) {
     db.Article.find({"saved": false}, function(error, data) {
+        if (err) {
+            next(err); // Pass errors to Express.
+          } else {
         var hbsObject = {
             article: data
-        };
+        }};
+       
         console.log(hbsObject);
         res.render("index", hbsObject)
     });
