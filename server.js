@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 var path = require("path");
-// require('dotenv').config();
+require('dotenv').config();
+
 
 //Initialize Express]
 const app = express();
@@ -18,10 +19,10 @@ partialsDir: path.join(__dirname, "/views/layouts/partials")
 app.set("view engine", "handlebars");
 
 //port set up for Heroku deployment
-var PORT = process.env.MONGO_URI || 3000;
+var PORT = process.env.PORT || 3000;
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.PORT || "mongodb://localhost/mongoHeadlines"
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines"
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
@@ -46,8 +47,8 @@ app.use(express.static("public"));
 // The routes
 app.get("/", function(req, res) {
     db.Article.find({"saved": false}, function(error, data) {
-        if (err) {
-            next(err); // Pass errors to Express.
+        if (error) {
+            next(error); // Pass errors to Express.
           } else {
         var hbsObject = {
             article: data
