@@ -19,7 +19,7 @@ partialsDir: path.join(__dirname, "/views/layouts/partials")
 app.set("view engine", "handlebars");
 
 //port set up for Heroku deployment
-var PORT = process.env.MONGODB_URI || 3000;
+var PORT = process.env.PORT || 3000;
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines"
