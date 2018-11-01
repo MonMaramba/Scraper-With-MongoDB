@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 var path = require("path");
-require('dotenv').config();
+
 
 
 //Initialize Express]
